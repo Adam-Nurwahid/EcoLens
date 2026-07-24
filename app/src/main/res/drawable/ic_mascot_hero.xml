@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="120dp"
+    android:height="120dp"
+    android:viewportWidth="120"
+    android:viewportHeight="120">
+    
+    <!-- Hero Cape (Vibrant Coral Red/Orange) -->
+    <path
+        android:pathData="M35,65 Q20,85 15,105 Q40,110 60,95 Q80,110 105,105 Q100,85 85,65 Z"
+        android:fillColor="#FF5722" />
+
+    <!-- Cape Fold Shadow -->
+    <path
+        android:pathData="M35,65 Q20,85 15,105 Q30,107 45,95 Z"
+        android:fillColor="#E64A19" />
+
+    <!-- Cute Earth Body (Friendly Green Planet Body) -->
+    <path
+        android:pathData="M60,20 C37.9,20 20,37.9 20,60 C20,82.1 37.9,100 60,100 C82.1,100 100,82.1 100,60 C100,37.9 82.1,20 60,20 Z"
+        android:fillColor="#4CAF50" />
+
+    <!-- Earth Continent Patches (Light Emerald Green) -->
+    <path
+        android:pathData="M35,35 Q45,25 55,38 Q48,52 32,48 Z"
+        android:fillColor="#81C784" />
+    <path
+        android:pathData="M70,30 Q88,35 82,50 Q68,45 70,30 Z"
+        android:fillColor="#81C784" />
+    <path
+        android:pathData="M40,75 Q55,68 75,78 Q60,92 40,75 Z"
+        android:fillColor="#81C784" />
+
+    <!-- Cute Big Shiny Eyes (Left Eye) -->
+    <path
+        android:pathData="M46,52 C42.7,52 40,55.6 40,60 C40,64.4 42.7,68 46,68 C49.3,68 52,64.4 52,60 C52,55.6 49.3,52 46,52 Z"
+        android:fillColor="#1B5E20" />
+    <path
+        android:pathData="M44,55 C43,55 42,56 42,57.5 C42,59 43,60 44,60 C45,60 46,59 46,57.5 C46,56 45,55 44,55 Z"
+        android:fillColor="#FFFFFF" />
+
+    <!-- Cute Big Shiny Eyes (Right Eye) -->
+    <path
+        android:pathData="M74,52 C70.7,52 68,55.6 68,60 C68,64.4 70.7,68 74,68 C77.3,68 80,64.4 80,60 C80,55.6 77.3,52 74,52 Z"
+        android:fillColor="#1B5E20" />
+    <path
+        android:pathData="M72,55 C71,55 70,56 70,57.5 C70,59 71,60 72,60 C73,60 74,59 74,57.5 C74,56 73,55 72,55 Z"
+        android:fillColor="#FFFFFF" />
+
+    <!-- Rosy Cheek Blushes -->
+    <path
+        android:pathData="M35,64 A5,4 0 1,0 45,64 A5,4 0 1,0 35,64"
+        android:fillColor="#FF8A80"
+        android:fillAlpha="0.6" />
+    <path
+        android:pathData="M75,64 A5,4 0 1,0 85,64 A5,4 0 1,0 75,64"
+        android:fillColor="#FF8A80"
+        android:fillAlpha="0.6" />
+
+    <!-- Big Happy Smile -->
+    <path
+        android:pathData="M52,68 Q60,78 68,68 Q60,73 52,68 Z"
+        android:fillColor="#1B5E20" />
+
+    <!-- Leaf Hero Crown / Sprout on Top -->
+    <path
+        android:pathData="M60,22 Q50,5 35,12 Q45,28 60,22 Z"
+        android:fillColor="#7CB342" />
+    <path
+        android:pathData="M60,22 Q70,5 85,12 Q75,28 60,22 Z"
+        android:fillColor="#AEEA00" />
+    <path
+        android:pathData="M60,22 L60,10"
+        android:strokeColor="#33691E"
+        android:strokeWidth="2.5"
+        android:strokeLineCap="round" />
+
+    <!-- Waving Glove Hand (Right) -->
+    <path
+        android:pathData="M95,55 C102,50 110,48 112,54 C113,58 108,65 98,66 Z"
+        android:fillColor="#FFFFFF" />
+    <!-- Glove Cuff -->
+    <path
+        android:pathData="M94,56 L98,67"
+        android:strokeColor="#FFC107"
+        android:strokeWidth="4"
+        android:strokeLineCap="round" />
+
+</vector>

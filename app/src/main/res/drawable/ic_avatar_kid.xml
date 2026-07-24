@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="60dp"
+    android:height="60dp"
+    android:viewportWidth="60"
+    android:viewportHeight="60">
+
+    <!-- Circle Background (Pastel Teal/Green) -->
+    <path
+        android:pathData="M30,0 C46.57,0 60,13.43 60,30 C60,46.57 46.57,60 30,60 C13.43,60 0,46.57 0,30 C0,13.43 13.43,0 30,0 Z"
+        android:fillColor="#E8F5E9" />
+
+    <!-- Cute Kid Hair (Warm Brown Cap style) -->
+    <path
+        android:pathData="M16,28 C15,18 22,10 30,10 C38,10 45,18 44,28 C44,28 40,24 30,24 C20,24 16,28 16,28 Z"
+        android:fillColor="#5D4037" />
+
+    <!-- Face Skin Tone -->
+    <path
+        android:pathData="M19,26 C19,20 24,18 30,18 C36,18 41,20 41,26 C41,35 36,40 30,40 C24,40 19,35 19,26 Z"
+        android:fillColor="#FFD180" />
+
+    <!-- Hair Bangs Front -->
+    <path
+        android:pathData="M18,24 Q24,20 30,24 Q36,19 42,24 Q36,16 30,16 Q24,16 18,24 Z"
+        android:fillColor="#4E342E" />
+
+    <!-- Eyes (Cute Dots) -->
+    <path
+        android:pathData="M25,28 A2.5,2.5 0 1,0 30,28 A2.5,2.5 0 1,0 25,28"
+        android:fillColor="#3E2723" />
+    <path
+        android:pathData="M33,28 A2.5,2.5 0 1,0 38,28 A2.5,2.5 0 1,0 33,28"
+        android:fillColor="#3E2723" />
+
+    <!-- Smile -->
+    <path
+        android:pathData="M27,33 Q30,37 33,33"
+        android:strokeColor="#3E2723"
+        android:strokeWidth="2"
+        android:strokeLineCap="round"
+        android:fillColor="#00000000" />
+
+    <!-- Cheeks Blush -->
+    <path
+        android:pathData="M22,31 A2,1.5 0 1,0 26,31 A2,1.5 0 1,0 22,31"
+        android:fillColor="#FF8A80"
+        android:fillAlpha="0.7" />
+    <path
+        android:pathData="M34,31 A2,1.5 0 1,0 38,31 A2,1.5 0 1,0 34,31"
+        android:fillColor="#FF8A80"
+        android:fillAlpha="0.7" />
+
+    <!-- Eco Hero Leaf Badge on Collar -->
+    <path
+        android:pathData="M22,44 C22,44 26,58 30,58 C34,58 38,44 38,44 Z"
+        android:fillColor="#2E7D32" />
+    <path
+        android:pathData="M30,44 L30,52"
+        android:strokeColor="#81C784"
+        android:strokeWidth="1.5" />
+</vector>

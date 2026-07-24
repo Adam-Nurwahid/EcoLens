@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/navigation_home">
+
+    <!-- Auth Destinations -->
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="com.adam.ecolens.ui.auth.LoginFragment"
+        android:label="Masuk"
+        tools:layout="@layout/fragment_login">
+        <action
+            android:id="@+id/action_login_to_register"
+            app:destination="@id/registerFragment" />
+        <action
+            android:id="@+id/action_login_to_home"
+            app:destination="@id/navigation_home"
+            app:popUpTo="@id/nav_graph"
+            app:popUpToInclusive="true" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/registerFragment"
+        android:name="com.adam.ecolens.ui.auth.RegisterFragment"
+        android:label="Daftar"
+        tools:layout="@layout/fragment_register">
+        <action
+            android:id="@+id/action_register_to_home"
+            app:destination="@id/navigation_home"
+            app:popUpTo="@id/nav_graph"
+            app:popUpToInclusive="true" />
+    </fragment>
+
+    <!-- Main Navigation Tabs -->
+    <fragment
+        android:id="@+id/navigation_home"
+        android:name="com.adam.ecolens.ui.home.HomeFragment"
+        android:label="@string/title_home"
+        tools:layout="@layout/fragment_home">
+        <action
+            android:id="@+id/action_home_to_scan"
+            app:destination="@id/navigation_scan" />
+        <action
+            android:id="@+id/action_home_to_learn"
+            app:destination="@id/navigation_learn" />
+        <action
+            android:id="@+id/action_home_to_quiz"
+            app:destination="@id/navigation_quiz" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_learn"
+        android:name="com.adam.ecolens.ui.learn.LearnFragment"
+        android:label="@string/title_learn"
+        tools:layout="@layout/fragment_learn" />
+
+    <fragment
+        android:id="@+id/navigation_scan"
+        android:name="com.adam.ecolens.ui.scan.ScanFragment"
+        android:label="@string/title_scan"
+        tools:layout="@layout/fragment_scan" />
+
+    <fragment
+        android:id="@+id/navigation_quiz"
+        android:name="com.adam.ecolens.ui.quiz.QuizFragment"
+        android:label="@string/title_quiz"
+        tools:layout="@layout/fragment_quiz">
+        <action
+            android:id="@+id/action_quiz_to_play"
+            app:destination="@id/quizPlayFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/quizPlayFragment"
+        android:name="com.adam.ecolens.ui.quiz.QuizPlayFragment"
+        android:label="Main Kuis"
+        tools:layout="@layout/fragment_quiz_play" />
+
+    <fragment
+        android:id="@+id/navigation_profile"
+        android:name="com.adam.ecolens.ui.profile.ProfileFragment"
+        android:label="@string/title_profile"
+        tools:layout="@layout/fragment_profile">
+        <action
+            android:id="@+id/action_profile_to_login"
+            app:destination="@id/loginFragment"
+            app:popUpTo="@id/nav_graph"
+            app:popUpToInclusive="true" />
+    </fragment>
+
+</navigation>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Kid-Friendly Spacings & Sizes -->
+    <dimen name="spacing_tiny">4dp</dimen>
+    <dimen name="spacing_small">8dp</dimen>
+    <dimen name="spacing_medium">16dp</dimen>
+    <dimen name="spacing_large">24dp</dimen>
+    <dimen name="spacing_xlarge">32dp</dimen>
+
+    <!-- Corner Radii -->
+    <dimen name="card_corner_radius_large">24dp</dimen>
+    <dimen name="card_corner_radius_medium">20dp</dimen>
+    <dimen name="card_corner_radius_pill">50dp</dimen>
+
+    <!-- Elevation -->
+    <dimen name="card_elevation_default">4dp</dimen>
+    <dimen name="card_elevation_hover">8dp</dimen>
+
+    <!-- Touch targets & Icon sizes -->
+    <dimen name="min_touch_target">56dp</dimen>
+    <dimen name="feature_card_icon_size">56dp</dimen>
+    <dimen name="mascot_size_home">110dp</dimen>
+    <dimen name="avatar_size_home">52dp</dimen>
+</resources>

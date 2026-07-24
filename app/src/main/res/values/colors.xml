@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    
+    <!-- Brand Primary Colors -->
+    <color name="primary">#2E7D32</color>
+    <color name="primary_dark">#1B5E20</color>
+    <color name="primary_container">#E8F5E9</color>
+    <color name="on_primary_container">#1B5E20</color>
+    
+    <!-- Waste Classification Colors -->
+    <color name="category_organik">#4CAF50</color>
+    <color name="category_organik_light">#E8F5E9</color>
+    <color name="category_anorganik">#2196F3</color>
+    <color name="category_anorganik_light">#E3F2FD</color>
+    <color name="category_b3">#E53935</color>
+    <color name="category_b3_light">#FFEBEE</color>
+    
+    <!-- Gamification & Accents -->
+    <color name="gold">#FFD700</color>
+    <color name="accent_orange">#FF9800</color>
+    <color name="star_active">#FFC107</color>
+    <color name="star_inactive">#CBD5E1</color>
+    
+    <!-- Neutral Colors -->
+    <color name="bg_light">#F0FDF4</color>
+    <color name="card_surface">#FFFFFF</color>
+    <color name="text_primary">#0F172A</color>
+    <color name="text_secondary">#64748B</color>
+    <color name="divider">#E2E8F0</color>
+    
+    <!-- Kid-Friendly Vibrant Palette -->
+    <color name="kid_sky_blue">#38BDF8</color>
+    <color name="kid_sky_blue_dark">#0284C7</color>
+    <color name="kid_sky_blue_light">#E0F2FE</color>
+    <color name="kid_mint_green">#10B981</color>
+    <color name="kid_mint_green_dark">#059669</color>
+    <color name="kid_mint_green_light">#D1FAE5</color>
+    <color name="kid_sunshine_yellow">#F59E0B</color>
+    <color name="kid_sunshine_yellow_dark">#D97706</color>
+    <color name="kid_sunshine_yellow_light">#FEF3C7</color>
+    <color name="kid_coral">#FF6B6B</color>
+    <color name="kid_purple">#8B5CF6</color>
+    <color name="hero_gradient_start">#1B5E20</color>
+    <color name="hero_gradient_center">#2E7D32</color>
+    <color name="hero_gradient_end">#43A047</color>
+    <color name="tip_card_bg">#FFFBEB</color>
+    <color name="tip_card_border">#FDE68A</color>
+</resources>

@@ -1,0 +1,38 @@
+<resources>
+    <string name="app_name">EcoLens</string>
+    <string name="app_tagline">Media Pembelajaran Pengenalan Sampah</string>
+    
+    <!-- Navigation -->
+    <string name="title_home">Beranda</string>
+    <string name="title_learn">Belajar</string>
+    <string name="title_scan">Pindai</string>
+    <string name="title_quiz">Kuis</string>
+    <string name="title_profile">Profil</string>
+    
+    <!-- Auth -->
+    <string name="login_title">Selamat Datang di EcoLens!</string>
+    <string name="login_subtitle">Masuk untuk melanjutkan belajar dan memilah sampah.</string>
+    <string name="username_hint">Nama Pengguna (Username)</string>
+    <string name="password_hint">Kata Sandi (Password)</string>
+    <string name="full_name_hint">Nama Lengkap</string>
+    <string name="btn_login">Masuk</string>
+    <string name="btn_register">Daftar Sekarang</string>
+    <string name="no_account">Belum punya akun? Daftar di sini</string>
+    <string name="have_account">Sudah punya akun? Masuk di sini</string>
+    <string name="register_title">Buat Akun Baru</string>
+    
+    <!-- Scan -->
+    <string name="scan_instruction">Arahkan kamera ke sampah atau pilih dari galeri untuk mendeteksi jenis sampah!</string>
+    <string name="btn_take_photo">Ambil Foto</string>
+    <string name="btn_choose_gallery">Pilih dari Galeri</string>
+    <string name="scan_result_title">Hasil Deteksi AI</string>
+    <string name="btn_scan_again">Pindai Lagi</string>
+    <string name="confidence_label">Tingkat Kepercayaan AI:</string>
+    
+    <!-- Quiz & Education -->
+    <string name="encyclopedia_title">Ensiklopedi Sampah</string>
+    <string name="news_title">Berita Lingkungan</string>
+    <string name="leaderboard_title">Papan Peringkat</string>
+    <string name="btn_start_quiz">Mulai Kuis</string>
+    <string name="logout">Keluar Akun</string>
+</resources>
