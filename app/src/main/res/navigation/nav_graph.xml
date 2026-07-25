@@ -41,13 +41,22 @@
         tools:layout="@layout/fragment_home">
         <action
             android:id="@+id/action_home_to_scan"
-            app:destination="@id/navigation_scan" />
+            app:destination="@id/navigation_scan"
+            app:launchSingleTop="true"
+            app:popUpTo="@id/nav_graph"
+            app:popUpToInclusive="false" />
         <action
             android:id="@+id/action_home_to_learn"
-            app:destination="@id/navigation_learn" />
+            app:destination="@id/navigation_learn"
+            app:launchSingleTop="true"
+            app:popUpTo="@id/nav_graph"
+            app:popUpToInclusive="false" />
         <action
             android:id="@+id/action_home_to_quiz"
-            app:destination="@id/navigation_quiz" />
+            app:destination="@id/navigation_quiz"
+            app:launchSingleTop="true"
+            app:popUpTo="@id/nav_graph"
+            app:popUpToInclusive="false" />
     </fragment>
 
     <fragment
@@ -69,7 +78,10 @@
         tools:layout="@layout/fragment_quiz">
         <action
             android:id="@+id/action_quiz_to_play"
-            app:destination="@id/quizPlayFragment" />
+            app:destination="@id/quizPlayFragment"
+            app:launchSingleTop="true"
+            app:popUpTo="@id/navigation_quiz"
+            app:popUpToInclusive="false" />
     </fragment>
 
     <fragment

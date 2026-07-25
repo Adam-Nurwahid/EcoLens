@@ -8,7 +8,16 @@
         <item name="colorOnPrimaryContainer">@color/on_primary_container</item>
         <item name="android:statusBarColor">@color/primary_dark</item>
         <item name="android:windowBackground">@color/bg_light</item>
-    </style>
 
+        <!-- Tambahkan baris ini untuk membuat ikon status bar menjadi gelap -->
+        <item name="android:windowLightStatusBar">true</item>
+
+        <!-- Opsional: Jika Navigation Bar (tombol back/home di bawah) juga terang -->
+        <item name="android:windowLightNavigationBar" tools:targetApi="O_MR1">true</item>
+    </style>
+    <style name="Theme.BottomNavIndicatorGreen" parent="">
+        <!-- Warna kapsul indikator (ganti @color/green dengan warna hijau kodemu) -->
+        <item name="colorSecondaryContainer">@color/kid_mint_green_light</item>
+    </style>
     <style name="Theme.EcoLens" parent="Base.Theme.EcoLens" />
 </resources>
