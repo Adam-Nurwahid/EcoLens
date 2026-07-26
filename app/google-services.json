@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "948223041245",
+    "project_id": "eco-lens-14944",
+    "storage_bucket": "eco-lens-14944.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:948223041245:android:54207426756c02ca608534",
+        "android_client_info": {
+          "package_name": "com.adam.ecolens"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "948223041245-ih7kd9vjm8da3n8asmq587q4hsktrv5l.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAQTQAQqUktWfG2reuA98yzVy4x58G7p0A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "948223041245-ih7kd9vjm8da3n8asmq587q4hsktrv5l.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
