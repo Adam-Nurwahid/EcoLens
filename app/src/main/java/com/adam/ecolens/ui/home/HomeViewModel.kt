@@ -1,23 +1,41 @@
 package com.adam.ecolens.ui.home
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.adam.ecolens.data.local.entity.UserEntity
+import androidx.lifecycle.viewModelScope
+import com.adam.ecolens.data.model.UserProfile
 import com.adam.ecolens.data.repository.AuthRepository
 import com.adam.ecolens.data.repository.ScanRepository
-import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.launch
 
+/**
+ * ViewModel for [HomeFragment].
+ * Loads user profile and total scan count from Firestore.
+ */
 class HomeViewModel(
     private val authRepository: AuthRepository,
     private val scanRepository: ScanRepository
 ) : ViewModel() {
 
-    fun getActiveUserFlow(): Flow<UserEntity?>? {
-        return authRepository.getActiveUserFlow()
+    private val _userProfile = MutableLiveData<UserProfile?>()
+    val userProfile: LiveData<UserProfile?> = _userProfile
+
+    private val _totalScans = MutableLiveData<Int>(0)
+    val totalScans: LiveData<Int> = _totalScans
+
+    init {
+        // Load data as soon as the ViewModel is created
+        loadData()
     }
 
-    fun getTotalScans(): Flow<Int>? {
-        val username = authRepository.getActiveUsername() ?: return null
-        return scanRepository.getTotalScans(username)
+    /** Fetches user profile and scan count from Firestore. */
+    fun loadData() {
+        val uid = authRepository.getUid() ?: return
+        viewModelScope.launch {
+            _userProfile.value = authRepository.getUserProfile(uid)
+            _totalScans.value = scanRepository.getTotalScans(uid)
+        }
     }
 
     fun getDailyTip(): String {

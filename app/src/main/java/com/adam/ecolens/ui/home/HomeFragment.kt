@@ -6,14 +6,15 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.adam.ecolens.R
 import com.adam.ecolens.databinding.FragmentHomeBinding
 import com.adam.ecolens.ui.ViewModelFactory
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
 
+/**
+ * Home screen — displays user name, total points, and daily tip.
+ * Data is loaded from Firestore via [HomeViewModel].
+ */
 class HomeFragment : Fragment() {
 
     private var _binding: FragmentHomeBinding? = null
@@ -51,16 +52,11 @@ class HomeFragment : Fragment() {
             findNavController().navigate(R.id.action_home_to_quiz)
         }
 
-        // Observe active user data
-        val userFlow = viewModel.getActiveUserFlow()
-        if (userFlow != null) {
-            viewLifecycleOwner.lifecycleScope.launch {
-                userFlow.collectLatest { user ->
-                    user?.let {
-                        binding.tvStudentName.text = it.fullName
-                        binding.tvUserPoints.text = "${it.totalPoints} XP"
-                    }
-                }
+        // Observe Firestore user profile (LiveData — replaces Room Flow)
+        viewModel.userProfile.observe(viewLifecycleOwner) { profile ->
+            profile?.let {
+                binding.tvStudentName.text = it.name
+                binding.tvUserPoints.text = "${it.totalPoints} XP"
             }
         }
     }

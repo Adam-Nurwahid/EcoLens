@@ -1,55 +1,63 @@
 package com.adam.ecolens.data.repository
 
-import com.adam.ecolens.data.local.dao.ScanHistoryDao
-import com.adam.ecolens.data.local.entity.ScanHistoryEntity
 import com.adam.ecolens.data.model.CategoryStat
+import com.adam.ecolens.data.model.ScanRecord
 import com.adam.ecolens.data.model.WasteCategory
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.withContext
 
+/**
+ * Repository for scan-related operations.
+ * All persistence is now handled by [FirestoreRepository] — Room is no longer used
+ * for scan data. The class is kept as a thin delegation layer so ViewModel
+ * call-sites do not need to change their dependency references.
+ */
 class ScanRepository(
-    private val scanHistoryDao: ScanHistoryDao
+    private val firestoreRepository: FirestoreRepository
 ) {
 
-    suspend fun saveScan(username: String, categoryLabel: String, confidence: Float, imageUri: String? = null): Long = withContext(Dispatchers.IO) {
-        val scan = ScanHistoryEntity(
-            0,
-            username,
-            categoryLabel.lowercase().trim(),
-            confidence,
-            imageUri,
-            System.currentTimeMillis()
+    /**
+     * Saves a new scan result to Firestore for the given [uid].
+     */
+    suspend fun saveScan(uid: String, categoryLabel: String, confidence: Float, imageUri: String? = null) {
+        firestoreRepository.saveScan(
+            uid = uid,
+            category = categoryLabel.lowercase().trim(),
+            confidence = confidence,
+            imageUri = imageUri
         )
-        return@withContext scanHistoryDao.insertScan(scan)
     }
 
-    fun getScanHistory(username: String): Flow<List<ScanHistoryEntity>> {
-        return scanHistoryDao.getHistoryByUsername(username)
+    /**
+     * Fetches the full scan history from Firestore for [uid].
+     * Returns the list sorted by most recent first.
+     */
+    suspend fun getScanHistory(uid: String): List<ScanRecord> {
+        return firestoreRepository.getScanHistory(uid)
     }
 
-    fun getTotalScans(username: String): Flow<Int> {
-        return scanHistoryDao.getTotalScansByUsername(username).map { it ?: 0 }
+    /**
+     * Returns the total number of scans recorded for [uid].
+     */
+    suspend fun getTotalScans(uid: String): Int {
+        return firestoreRepository.getScanCount(uid)
     }
 
-    fun getCategoryStats(username: String): Flow<List<CategoryStat>> {
-        return scanHistoryDao.getCategoryCountsByUsername(username).map { rawCounts ->
-            val total = rawCounts.sumOf { it.count }
-            if (total == 0) {
-                listOf(
-                    CategoryStat(WasteCategory.ORGANIK, 0, 0f),
-                    CategoryStat(WasteCategory.ANORGANIK, 0, 0f),
-                    CategoryStat(WasteCategory.B3, 0, 0f)
-                )
-            } else {
-                val map = rawCounts.associate { it.category to it.count }
-                listOf(WasteCategory.ORGANIK, WasteCategory.ANORGANIK, WasteCategory.B3).map { cat ->
-                    val count = map[cat.id] ?: 0
-                    val percentage = (count.toFloat() / total.toFloat()) * 100f
-                    CategoryStat(cat, count, percentage)
-                }
-            }
+    /**
+     * Computes category breakdown statistics from a list of [ScanRecord]s.
+     * Aggregated locally from the fetched list to avoid extra Firestore queries.
+     */
+    fun computeCategoryStats(records: List<ScanRecord>): List<CategoryStat> {
+        val total = records.size
+        if (total == 0) {
+            return listOf(
+                CategoryStat(WasteCategory.ORGANIK, 0, 0f),
+                CategoryStat(WasteCategory.ANORGANIK, 0, 0f),
+                CategoryStat(WasteCategory.B3, 0, 0f)
+            )
+        }
+        val countMap = records.groupingBy { it.category.lowercase().trim() }.eachCount()
+        return listOf(WasteCategory.ORGANIK, WasteCategory.ANORGANIK, WasteCategory.B3).map { cat ->
+            val count = countMap[cat.id] ?: 0
+            CategoryStat(cat, count, (count.toFloat() / total.toFloat()) * 100f)
         }
     }
 }

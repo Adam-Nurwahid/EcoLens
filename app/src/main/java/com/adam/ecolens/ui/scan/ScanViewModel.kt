@@ -18,6 +18,10 @@ data class ScanResultUiState(
     val wasteCategory: WasteCategory
 )
 
+/**
+ * ViewModel for [ScanFragment].
+ * Saves scan results to Firestore via [ScanRepository] using Firebase UID.
+ */
 class ScanViewModel(
     private val authRepository: AuthRepository,
     private val scanRepository: ScanRepository,
@@ -48,10 +52,10 @@ class ScanViewModel(
                     wasteCategory = category
                 )
 
-                // Save scan to database tied to active user
-                val username = authRepository.getActiveUsername() ?: "guest"
+                // Save scan to Firestore using Firebase UID
+                val uid = authRepository.getUid() ?: return@launch
                 scanRepository.saveScan(
-                    username = username,
+                    uid = uid,
                     categoryLabel = result.label,
                     confidence = result.confidence
                 )
@@ -69,6 +73,5 @@ class ScanViewModel(
 
     override fun onCleared() {
         super.onCleared()
-        // Do not close imageClassifierHelper if shared singleton, or handle cleanup cleanly
     }
 }

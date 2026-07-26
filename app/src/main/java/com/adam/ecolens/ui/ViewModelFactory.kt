@@ -7,6 +7,7 @@ import com.adam.ecolens.data.local.AppDatabase
 import com.adam.ecolens.data.local.SessionManager
 import com.adam.ecolens.data.repository.AuthRepository
 import com.adam.ecolens.data.repository.EducationRepository
+import com.adam.ecolens.data.repository.FirestoreRepository
 import com.adam.ecolens.data.repository.QuizRepository
 import com.adam.ecolens.data.repository.ScanRepository
 import com.adam.ecolens.ml.ImageClassifierHelper
@@ -19,14 +20,25 @@ import com.adam.ecolens.ui.quiz.QuizPlayViewModel
 import com.adam.ecolens.ui.quiz.QuizViewModel
 import com.adam.ecolens.ui.scan.ScanViewModel
 
+/**
+ * Single ViewModelProvider.Factory for all ViewModels in EcoLens.
+ * All repositories are singletons (lazy) to avoid unnecessary re-creation.
+ */
 class ViewModelFactory(private val context: Context) : ViewModelProvider.Factory {
 
     private val db by lazy { AppDatabase.getDatabase(context) }
     private val sessionManager by lazy { SessionManager(context) }
-    
-    private val authRepository by lazy { AuthRepository(db.userDao(), sessionManager) }
-    private val scanRepository by lazy { ScanRepository(db.scanHistoryDao()) }
-    private val quizRepository by lazy { QuizRepository(db.quizScoreDao(), db.userDao()) }
+
+    // Firestore — single source of truth for all cloud data
+    private val firestoreRepository by lazy { FirestoreRepository() }
+
+    // Auth — passes FirestoreRepository to create user docs on login
+    private val authRepository by lazy { AuthRepository(db.userDao(), sessionManager, firestoreRepository) }
+
+    // Scan & Quiz now backed by Firestore instead of Room
+    private val scanRepository by lazy { ScanRepository(firestoreRepository) }
+    private val quizRepository by lazy { QuizRepository(firestoreRepository) }
+
     private val educationRepository by lazy { EducationRepository() }
     private val imageClassifierHelper by lazy { ImageClassifierHelper(context) }
 

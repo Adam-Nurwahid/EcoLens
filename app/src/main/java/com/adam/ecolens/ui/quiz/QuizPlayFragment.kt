@@ -14,6 +14,15 @@ import com.adam.ecolens.R
 import com.adam.ecolens.databinding.FragmentQuizPlayBinding
 import com.adam.ecolens.ui.ViewModelFactory
 
+/**
+ * Active quiz play screen.
+ *
+ * On creation, [QuizPlayViewModel.loadLevel] is called, which fetches the level from the
+ * in-memory Firestore cache (or triggers a network fetch on the first visit). A spinner
+ * is shown while loading. If the fetch fails, a kid-friendly error panel with a retry
+ * button is shown. Once loaded, the quiz runs entirely in-memory with no additional
+ * network calls until the quiz is submitted.
+ */
 class QuizPlayFragment : Fragment() {
 
     private var _binding: FragmentQuizPlayBinding? = null
@@ -22,6 +31,9 @@ class QuizPlayFragment : Fragment() {
     private val viewModel: QuizPlayViewModel by viewModels {
         ViewModelFactory(requireContext())
     }
+
+    /** Stored as a field so the retry click listener can call loadLevel() without re-reading args. */
+    private var levelId: Int = 1
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -35,10 +47,11 @@ class QuizPlayFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val levelId = arguments?.getInt("levelId", 1) ?: 1
+        levelId = arguments?.getInt("levelId", 1) ?: 1
         viewModel.loadLevel(levelId)
 
         setupOptionListeners()
+        setupRetry()
         observeViewModel()
     }
 
@@ -68,7 +81,34 @@ class QuizPlayFragment : Fragment() {
         }
     }
 
+    private fun setupRetry() {
+        binding.btnPlayRetry.setOnClickListener {
+            viewModel.loadLevel(levelId)
+        }
+    }
+
     private fun observeViewModel() {
+        // Loading state: show spinner, hide content and error panel
+        viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
+            binding.progressBarQuizPlay.visibility = if (isLoading) View.VISIBLE else View.GONE
+            if (isLoading) {
+                binding.scrollContent.visibility = View.GONE
+                binding.layoutPlayError.visibility = View.GONE
+            }
+        }
+
+        // Error state: hide spinner + content, show error panel with message
+        viewModel.errorMessage.observe(viewLifecycleOwner) { msg ->
+            if (msg != null) {
+                binding.layoutPlayError.visibility = View.VISIBLE
+                binding.tvPlayErrorMessage.text = msg
+                binding.scrollContent.visibility = View.GONE
+                binding.progressBarQuizPlay.visibility = View.GONE
+            } else {
+                binding.layoutPlayError.visibility = View.GONE
+            }
+        }
+
         viewModel.questionProgressText.observe(viewLifecycleOwner) { text ->
             binding.tvProgress.text = text
             val currentProgress = text.filter { it.isDigit() }.firstOrNull()?.toString()?.toIntOrNull() ?: 1
@@ -76,6 +116,9 @@ class QuizPlayFragment : Fragment() {
         }
 
         viewModel.currentQuestion.observe(viewLifecycleOwner) { q ->
+            // Show content scroll view once we have a question
+            binding.scrollContent.visibility = View.VISIBLE
+
             binding.tvQuestionText.text = q.questionText
             binding.rgOptions.clearCheck()
             binding.cardExplanation.visibility = View.GONE

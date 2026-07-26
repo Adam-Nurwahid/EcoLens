@@ -1,11 +1,12 @@
 package com.adam.ecolens.data.model
 
 data class Question(
-    val id: Int,
-    val questionText: String,
-    val options: List<String>,
-    val correctAnswerIndex: Int,
-    val explanation: String
+    val id: Int = 0,
+    val order: Int = 0,
+    val questionText: String = "",
+    val options: List<String> = emptyList(),
+    val correctAnswerIndex: Int = 0,
+    val explanation: String = ""
 )
 
 data class QuizLevel(
