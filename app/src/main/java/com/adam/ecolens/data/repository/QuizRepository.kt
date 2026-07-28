@@ -65,29 +65,36 @@ class QuizRepository(
         val profile = firestoreRepository.getUserProfile(uid)
         val unlockedLevel = profile?.unlockedLevel ?: 1
 
+        @Suppress("DEPRECATION")
         return baselevels.map { level ->
             val userScore = scoreMap[level.levelId]
+            val correct = userScore?.correctCount?.takeIf { it > 0 } ?: userScore?.stars ?: 0
+            val total = userScore?.totalQuestions ?: 0
             level.copy(
                 isUnlocked = level.levelId <= unlockedLevel,
-                starsAchieved = userScore?.stars ?: 0
+                correctCount = correct,
+                totalQuestionsAttempted = total,
+                starsAchieved = correct
             )
         }
     }
 
     /**
-     * Saves a quiz result to Firestore (best score kept) and updates
+     * Saves a quiz result to Firestore (best attempt kept) and updates
      * totalPoints + unlockedLevel atomically.
+     *
+     * [correctCount] = questions answered correctly this attempt.
+     * [totalQuestions] = total questions in this level.
      *
      * Returns a [QuizScore] reflecting the best-ever result for this level.
      */
-    suspend fun saveQuizResult(uid: String, levelId: Int, score: Int): QuizScore {
-        val stars = when {
-            score >= 90 -> 3
-            score >= 70 -> 2
-            score >= 50 -> 1
-            else -> 0
-        }
-
+    suspend fun saveQuizResult(
+        uid: String,
+        levelId: Int,
+        score: Int,
+        correctCount: Int,
+        totalQuestions: Int
+    ): QuizScore {
         // Use cached level count if available, fall back to 0 (safe — only used for unlock logic)
         val totalLevels = cachedLevels?.size ?: 0
 
@@ -95,15 +102,22 @@ class QuizRepository(
             uid = uid,
             levelId = levelId,
             score = score,
-            stars = stars,
+            correctCount = correctCount,
+            totalQuestions = totalQuestions,
             pointsEarned = score,     // points = final score value
             totalLevels = totalLevels
         )
 
-        // Return the updated record (best score will be read from Firestore)
+        // Return the updated record (best attempt will be read from Firestore)
         return firestoreRepository.getQuizScores(uid)
             .find { it.levelId == levelId }
-            ?: QuizScore(levelId = levelId, score = score, stars = stars)
+            ?: QuizScore(
+                levelId = levelId,
+                score = score,
+                stars = correctCount,
+                correctCount = correctCount,
+                totalQuestions = totalQuestions
+            )
     }
 
     /**

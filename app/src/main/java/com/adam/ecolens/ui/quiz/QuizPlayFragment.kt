@@ -185,25 +185,35 @@ class QuizPlayFragment : Fragment() {
         }
     }
 
-    private fun showResultDialog(state: QuizCompletedState) {
-        val starsText = "★".repeat(state.stars) + "☆".repeat(3 - state.stars)
-        val message = "Skor Akhir: ${state.score} / 100\nBintang: $starsText\n" +
-                if (state.isLevelUnlocked) "Selamat! Kamu berhasil menyelesaikan level ini! 🎉"
-                else "Tetap semangat! Coba lagi untuk membuka level berikutnya!"
+    private var resultDialog: AlertDialog? = null
 
-        AlertDialog.Builder(requireContext())
+    private fun showResultDialog(state: QuizCompletedState) {
+        // Cegah dialog dobel muncul
+        resultDialog?.dismiss()
+
+        val starsText = "★".repeat(state.correctCount) + "☆".repeat(state.totalQuestions - state.correctCount)
+        val message = "Skor Akhir: ${state.score} / 100\n" +
+                "Bintang: $starsText (${state.correctCount}/${state.totalQuestions} benar)\n" +
+                "Selamat! Kamu berhasil menyelesaikan level ini! 🎉"
+
+        resultDialog = AlertDialog.Builder(requireContext())
             .setTitle("Kuis Selesai!")
             .setMessage(message)
             .setCancelable(false)
             .setPositiveButton("Ke Daftar Level") { dialog, _ ->
                 dialog.dismiss()
-                findNavController().navigateUp()
+                if (isAdded) {
+                    findNavController().navigateUp()
+                }
             }
             .show()
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
+        resultDialog?.dismiss()
+        resultDialog = null
         _binding = null
     }
+
 }

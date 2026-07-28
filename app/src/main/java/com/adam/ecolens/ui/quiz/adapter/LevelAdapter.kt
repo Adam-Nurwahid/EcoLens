@@ -3,9 +3,7 @@ package com.adam.ecolens.ui.quiz.adapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
-import com.adam.ecolens.R
 import com.adam.ecolens.data.model.QuizLevel
 import com.adam.ecolens.databinding.ItemQuizLevelBinding
 
@@ -28,7 +26,6 @@ class LevelAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val level = levels[position]
-        val context = holder.itemView.context
 
         holder.binding.tvLevelTitle.text = level.title
         holder.binding.tvLevelSubtitle.text = level.subtitle
@@ -39,11 +36,14 @@ class LevelAdapter(
             holder.binding.imgLockIcon.visibility = View.GONE
             holder.binding.cardLevel.alpha = 1.0f
 
-            val goldColor = ContextCompat.getColor(context, R.color.star_active)
-            val inactiveColor = ContextCompat.getColor(context, R.color.star_inactive)
-            holder.binding.tvStar1.setTextColor(if (level.starsAchieved >= 1) goldColor else inactiveColor)
-            holder.binding.tvStar2.setTextColor(if (level.starsAchieved >= 2) goldColor else inactiveColor)
-            holder.binding.tvStar3.setTextColor(if (level.starsAchieved >= 3) goldColor else inactiveColor)
+            // Dynamic stars: one star per question, filled if answered correctly
+            val total = level.totalQuestionsAttempted
+            val correct = level.correctCount
+            holder.binding.tvStars.text = if (total > 0) {
+                "★".repeat(correct) + "☆".repeat(total - correct)
+            } else {
+                "" // Never attempted — show nothing
+            }
 
             holder.binding.cardLevel.setOnClickListener {
                 onLevelClick(level)
@@ -52,8 +52,9 @@ class LevelAdapter(
             holder.binding.tvLevelBadge.visibility = View.INVISIBLE
             holder.binding.imgLockIcon.visibility = View.VISIBLE
             holder.binding.cardLevel.alpha = 0.6f
+            holder.binding.tvStars.text = ""
             holder.binding.cardLevel.setOnClickListener {
-                // Locked level
+                // Locked level — no action
             }
         }
     }

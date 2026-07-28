@@ -110,6 +110,17 @@ class QuizFragment : Fragment() {
         }
     }
 
+    /**
+     * Bug 3 fix: re-fetch level data every time this screen becomes visible again.
+     * This covers the case where the user returns from QuizPlayFragment — the ViewModel
+     * is NOT recreated on back-navigation, so init{} won't re-run. Calling loadData()
+     * here guarantees the star display is always up to date.
+     */
+    override fun onResume() {
+        super.onResume()
+        viewModel.loadData()
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null

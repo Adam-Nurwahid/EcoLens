@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.adam.ecolens.R
+import com.adam.ecolens.data.local.SessionManager
 import com.adam.ecolens.databinding.FragmentHomeBinding
 import com.adam.ecolens.ui.ViewModelFactory
 
@@ -22,6 +23,14 @@ class HomeFragment : Fragment() {
 
     private val viewModel: HomeViewModel by viewModels {
         ViewModelFactory(requireContext())
+    }
+
+    /** One-time Dashboard coach-marks tutorial — lazily created, safe to access post-layout. */
+    private val tutorialManager by lazy {
+        DashboardTutorialManager(
+            fragment = this,
+            sessionManager = SessionManager(requireContext())
+        )
     }
 
     override fun onCreateView(
@@ -40,7 +49,7 @@ class HomeFragment : Fragment() {
 
         // Navigation shortcuts
         binding.btnBannerScan.setOnClickListener {
-            findNavController().navigate(R.id.action_home_to_scan)
+            findNavController().navigate(R.id.action_home_to_learn)
         }
         binding.cardShortcutScan.setOnClickListener {
             findNavController().navigate(R.id.action_home_to_scan)
@@ -59,6 +68,16 @@ class HomeFragment : Fragment() {
                 binding.tvUserPoints.text = "${it.totalPoints} XP"
             }
         }
+
+        // Start the one-time Dashboard walkthrough after the first complete layout pass
+        // (so every target view has real on-screen coordinates from getLocationOnScreen).
+        val vto = binding.root.viewTreeObserver
+        vto.addOnGlobalLayoutListener(object : android.view.ViewTreeObserver.OnGlobalLayoutListener {
+            override fun onGlobalLayout() {
+                binding.root.viewTreeObserver.removeOnGlobalLayoutListener(this)
+                tutorialManager.showIfNeeded()
+            }
+        })
     }
 
     override fun onDestroyView() {

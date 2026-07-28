@@ -131,15 +131,24 @@ class FirestoreRepository {
      * Document ID = levelId.toString() so each level has exactly one record.
      *
      * Logic:
-     * - Keeps the BEST score and BEST stars achieved across multiple attempts.
+     * - Keeps the BEST attempt (highest [correctCount]) across multiple tries.
+     * - [stars] is written as the same value as [correctCount] for backward-compat.
      * - Atomically increments totalPoints by [pointsEarned].
-     * - If [score] >= 70 and there is a next level, unlocks it.
+     * - Unlocks the next level simply by completing (no score threshold needed).
      */
-    suspend fun saveQuizScore(uid: String, levelId: Int, score: Int, stars: Int, pointsEarned: Int, totalLevels: Int) {
+    suspend fun saveQuizScore(
+        uid: String,
+        levelId: Int,
+        score: Int,
+        correctCount: Int,
+        totalQuestions: Int,
+        pointsEarned: Int,
+        totalLevels: Int
+    ) {
         val userRef = db.collection("users").document(uid)
         val scoreRef = userRef.collection("quizScores").document(levelId.toString())
 
-        // Read existing best score to keep the highest
+        // Read existing best score to keep the highest correctCount
         val existing = try {
             scoreRef.get().await().toObject(QuizScore::class.java)
         } catch (e: Exception) {
@@ -147,12 +156,18 @@ class FirestoreRepository {
         }
 
         val bestScore = maxOf(existing?.score ?: 0, score)
-        val bestStars = maxOf(existing?.stars ?: 0, stars)
+        // Keep the attempt with the highest correctCount (best stars)
+        val bestCorrectCount = maxOf(existing?.correctCount ?: existing?.stars ?: 0, correctCount)
+        // totalQuestions should be consistent for the same level; use the current value
+        val bestTotalQuestions = if (bestCorrectCount == correctCount) totalQuestions
+                                 else existing?.totalQuestions ?: totalQuestions
 
         val scoreData = hashMapOf(
             "levelId" to levelId,
             "score" to bestScore,
-            "stars" to bestStars,
+            "stars" to bestCorrectCount,          // backward-compat alias
+            "correctCount" to bestCorrectCount,
+            "totalQuestions" to bestTotalQuestions,
             "completedAt" to Timestamp.now()
         )
 
@@ -161,8 +176,8 @@ class FirestoreRepository {
             batch.set(scoreRef, scoreData)
             batch.update(userRef, "totalPoints", FieldValue.increment(pointsEarned.toLong()))
 
-            // Unlock next level if score passes threshold and not last level
-            if (score >= 70 && levelId < totalLevels) {
+            // Unlock next level on completion (no score threshold) — but don't exceed last level
+            if (levelId < totalLevels) {
                 batch.update(userRef, "unlockedLevel", FieldValue.increment(1))
             }
         }.await()
@@ -231,6 +246,27 @@ class FirestoreRepository {
      * Fetches top 10 users ordered by totalPoints descending.
      * Returns a list of [UserProfile] with the document UID accessible
      * via the wrapped [LeaderboardEntry].
+     *
+     * ⚠️ IMPORTANT — Auth deletion does NOT cascade to Firestore:
+     * Deleting a user from Firebase Authentication (via the Console, Admin SDK, or
+     * FirebaseAuth.currentUser.delete()) removes the Auth account ONLY. The
+     * corresponding `users/{uid}` Firestore document (and its `quizScores`
+     * subcollection) is a completely separate system and is NOT automatically
+     * cleaned up. Orphaned Firestore documents will continue to appear in this
+     * leaderboard query even after the Auth account is gone.
+     *
+     * Fix options (choose one):
+     *  1. Cloud Function trigger (recommended for production): deploy a
+     *     `functions.auth.user().onDelete()` handler that deletes `users/{uid}`
+     *     and its `quizScores` subcollection whenever an Auth account is removed.
+     *  2. Admin SDK script: run a Node.js/Python script with the Firebase Admin SDK
+     *     that cross-checks existing Auth users against Firestore docs and removes
+     *     any orphaned documents.
+     *  3. One-time cleanup: call [deleteAllUsersData] from a debug menu or migration
+     *     script to wipe the entire `users` collection (use only when ALL accounts
+     *     have been deleted and you want a clean slate).
+     *
+     * See docs/AdminCleanupNote.md for details.
      */
     suspend fun getLeaderboard(): List<LeaderboardEntry> {
         return try {
@@ -245,6 +281,54 @@ class FirestoreRepository {
             }
         } catch (e: Exception) {
             emptyList()
+        }
+    }
+
+    // -----------------------------------------------------------------------
+    // Admin / Debug Utilities
+    // -----------------------------------------------------------------------
+
+    /**
+     * ONE-TIME CLEANUP UTILITY — call this only from a debug/admin menu.
+     *
+     * Deletes ALL documents in the `users` collection along with each user's
+     * `quizScores` subcollection. Use this when all Firebase Auth accounts have
+     * already been deleted and you need to remove orphaned Firestore data.
+     *
+     * Firestore does not support recursive deletes natively on the client SDK, so
+     * this function:
+     *  1. Fetches every document in `users`.
+     *  2. For each user document, fetches and batch-deletes all docs in their
+     *     `quizScores` subcollection.
+     *  3. Batch-deletes all `users` documents (in chunks of 500 — Firestore limit).
+     *
+     * ⚠️ This is irreversible. Do NOT call in production flows.
+     *
+     * @throws Exception if any Firestore operation fails; partial deletes may occur.
+     */
+    suspend fun deleteAllUsersData() {
+        val usersSnapshot = db.collection("users").get().await()
+
+        // Step 1: delete each user's quizScores subcollection
+        for (userDoc in usersSnapshot.documents) {
+            val scoresSnapshot = userDoc.reference
+                .collection("quizScores")
+                .get()
+                .await()
+
+            // Batch-delete subcollection docs in chunks of 500
+            scoresSnapshot.documents.chunked(500).forEach { chunk ->
+                val batch = db.batch()
+                chunk.forEach { batch.delete(it.reference) }
+                batch.commit().await()
+            }
+        }
+
+        // Step 2: batch-delete all users documents in chunks of 500
+        usersSnapshot.documents.chunked(500).forEach { chunk ->
+            val batch = db.batch()
+            chunk.forEach { batch.delete(it.reference) }
+            batch.commit().await()
         }
     }
 

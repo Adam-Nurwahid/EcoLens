@@ -6,15 +6,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.adam.ecolens.data.model.Question
 import com.adam.ecolens.data.model.QuizLevel
-import com.adam.ecolens.data.model.QuizScore
 import com.adam.ecolens.data.repository.AuthRepository
 import com.adam.ecolens.data.repository.QuizRepository
 import kotlinx.coroutines.launch
 
 data class QuizCompletedState(
     val score: Int,
+    val correctCount: Int,
     val totalQuestions: Int,
-    val stars: Int,
     val isLevelUnlocked: Boolean
 )
 
@@ -125,19 +124,30 @@ class QuizPlayViewModel(
     private fun finishQuiz() {
         val level = currentLevel ?: return
         val total = level.questions.size
-        val finalScore = ((correctAnswersCount.toFloat() / total.toFloat()) * 100).toInt()
+        val finalScore = if (total > 0) ((correctAnswersCount.toFloat() / total.toFloat()) * 100).toInt() else 0
 
         viewModelScope.launch {
-            // Use Firebase UID (not Room username) to save to Firestore
             val uid = authRepository.getUid() ?: return@launch
-            val quizScore: QuizScore = quizRepository.saveQuizResult(uid, level.levelId, finalScore)
+            quizRepository.saveQuizResult(
+                uid = uid,
+                levelId = level.levelId,
+                score = finalScore,
+                correctCount = correctAnswersCount,
+                totalQuestions = total
+            )
 
             _quizCompletedState.value = QuizCompletedState(
                 score = finalScore,
+                correctCount = correctAnswersCount,
                 totalQuestions = total,
-                stars = quizScore.stars,
-                isLevelUnlocked = finalScore >= level.minScoreToPass
+                // Completing always unlocks the next level (Bug 1 fix)
+                isLevelUnlocked = true
             )
         }
+    }
+
+    // tambahin ini, panggil dari Fragment setelah dialog di-dismiss
+    fun consumeQuizCompletedState() {
+        _quizCompletedState.value = null
     }
 }

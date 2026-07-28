@@ -165,14 +165,14 @@
                     android:layout_marginTop="16dp"
                     android:minHeight="@dimen/min_touch_target"
                     android:paddingHorizontal="20dp"
-                    android:text="Mulai Pindai AI"
+                    android:text="Mulai Belajar 🌿"
                     android:textColor="@color/primary_dark"
                     android:textSize="14sp"
                     android:textStyle="bold"
                     app:backgroundTint="@color/white"
                     app:cornerRadius="@dimen/card_corner_radius_pill"
                     app:elevation="4dp"
-                    app:icon="@drawable/ic_nav_scan"
+                    app:icon="@drawable/ic_nav_learn"
                     app:iconGravity="textStart"
                     app:iconPadding="8dp"
                     app:iconSize="20dp"
@@ -208,73 +208,11 @@
             app:layout_constraintTop_toBottomOf="@id/cardHeroBanner" />
 
         <!-- 3-Column Responsive Constraint Chain Grid -->
-        <!-- Card 1: Pindai AI -->
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/cardShortcutScan"
-            android:layout_width="0dp"
-            android:layout_height="145dp"
-            android:layout_marginTop="12dp"
-            android:clickable="true"
-            android:focusable="true"
-            android:foreground="?attr/selectableItemBackground"
-            app:cardCornerRadius="@dimen/card_corner_radius_large"
-            app:cardElevation="@dimen/card_elevation_default"
-            android:stateListAnimator="@animator/card_press_scale"
-            app:strokeWidth="0dp"
-            app:layout_constraintEnd_toStartOf="@id/cardShortcutLearn"
-            app:layout_constraintHorizontal_chainStyle="spread"
-            app:layout_constraintHorizontal_weight="1"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvSectionTitle">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@drawable/bg_shortcut_scan"
-                android:gravity="center"
-                android:orientation="vertical"
-                android:padding="10dp">
-
-                <FrameLayout
-                    android:layout_width="52dp"
-                    android:layout_height="52dp"
-                    android:background="@drawable/bg_badge_scan">
-
-                    <ImageView
-                        android:layout_width="28dp"
-                        android:layout_height="28dp"
-                        android:layout_gravity="center"
-                        android:contentDescription="Pindai AI"
-                        android:src="@drawable/ic_nav_scan"
-                        app:tint="@color/white" />
-                </FrameLayout>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:text="Pindai AI"
-                    android:textColor="@color/text_primary"
-                    android:textSize="14sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="2dp"
-                    android:text="Deteksi Cepat"
-                    android:textColor="@color/kid_sky_blue_dark"
-                    android:textSize="10sp"
-                    android:textStyle="bold" />
-            </LinearLayout>
-        </com.google.android.material.card.MaterialCardView>
-
-        <!-- Card 2: Belajar -->
+        <!-- Card 1: Belajar (Learn) — first in chain -->
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/cardShortcutLearn"
             android:layout_width="0dp"
             android:layout_height="145dp"
-            android:layout_marginStart="10dp"
             android:layout_marginTop="12dp"
             android:clickable="true"
             android:focusable="true"
@@ -283,9 +221,10 @@
             app:cardElevation="@dimen/card_elevation_default"
             android:stateListAnimator="@animator/card_press_scale"
             app:strokeWidth="0dp"
-            app:layout_constraintEnd_toStartOf="@id/cardShortcutQuiz"
+            app:layout_constraintEnd_toStartOf="@id/cardShortcutScan"
+            app:layout_constraintHorizontal_chainStyle="spread"
             app:layout_constraintHorizontal_weight="1"
-            app:layout_constraintStart_toEndOf="@id/cardShortcutScan"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tvSectionTitle">
 
             <LinearLayout
@@ -330,7 +269,68 @@
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- Card 3: Kuis Seru -->
+        <!-- Card 2: Pindai AI — center -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardShortcutScan"
+            android:layout_width="0dp"
+            android:layout_height="145dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="12dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?attr/selectableItemBackground"
+            app:cardCornerRadius="@dimen/card_corner_radius_large"
+            app:cardElevation="@dimen/card_elevation_default"
+            android:stateListAnimator="@animator/card_press_scale"
+            app:strokeWidth="0dp"
+            app:layout_constraintEnd_toStartOf="@id/cardShortcutQuiz"
+            app:layout_constraintHorizontal_weight="1"
+            app:layout_constraintStart_toEndOf="@id/cardShortcutLearn"
+            app:layout_constraintTop_toBottomOf="@id/tvSectionTitle">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/bg_shortcut_scan"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="10dp">
+
+                <FrameLayout
+                    android:layout_width="52dp"
+                    android:layout_height="52dp"
+                    android:background="@drawable/bg_badge_scan">
+
+                    <ImageView
+                        android:layout_width="28dp"
+                        android:layout_height="28dp"
+                        android:layout_gravity="center"
+                        android:contentDescription="Pindai AI"
+                        android:src="@drawable/ic_nav_scan"
+                        app:tint="@color/white" />
+                </FrameLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="Pindai AI"
+                    android:textColor="@color/text_primary"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:text="Deteksi Cepat"
+                    android:textColor="@color/kid_sky_blue_dark"
+                    android:textSize="10sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Card 3: Kuis Seru — last -->
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/cardShortcutQuiz"
             android:layout_width="0dp"
@@ -346,7 +346,7 @@
             app:strokeWidth="0dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_weight="1"
-            app:layout_constraintStart_toEndOf="@id/cardShortcutLearn"
+            app:layout_constraintStart_toEndOf="@id/cardShortcutScan"
             app:layout_constraintTop_toBottomOf="@id/tvSectionTitle">
 
             <LinearLayout
@@ -403,7 +403,7 @@
             app:strokeWidth="1.5dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/cardShortcutScan">
+            app:layout_constraintTop_toBottomOf="@id/cardShortcutLearn">
 
             <LinearLayout
                 android:layout_width="match_parent"

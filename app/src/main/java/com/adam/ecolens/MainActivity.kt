@@ -41,7 +41,10 @@ class MainActivity : AppCompatActivity() {
         // Control bottom nav visibility based on destination
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
-                R.id.loginFragment, R.id.registerFragment, R.id.quizPlayFragment -> {
+                R.id.loginFragment,
+                R.id.registerFragment,
+                R.id.onboardingFragment,
+                R.id.quizPlayFragment -> {
                     binding.bottomNavView.visibility = View.GONE
                 }
                 else -> {

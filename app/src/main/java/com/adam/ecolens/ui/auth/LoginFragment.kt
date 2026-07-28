@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.adam.ecolens.R
+import com.adam.ecolens.data.local.SessionManager
 import com.adam.ecolens.data.repository.FirebaseAuthResult
 import com.adam.ecolens.databinding.FragmentLoginBinding
 import com.adam.ecolens.ui.ViewModelFactory
@@ -30,6 +31,9 @@ class LoginFragment : Fragment() {
         ViewModelFactory(requireContext())
     }
 
+    /** Lazily initialised — only needed for the onboarding check. */
+    private val sessionManager by lazy { SessionManager(requireContext()) }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -42,9 +46,13 @@ class LoginFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // If an existing session is found, skip straight to Home
+        // If an existing session is found, skip straight to Home (or onboarding if not yet done)
         if (viewModel.isLoggedIn()) {
-            findNavController().navigate(R.id.action_login_to_home)
+            val dest = if (sessionManager.hasCompletedOnboarding())
+                R.id.action_login_to_home
+            else
+                R.id.action_login_to_onboarding
+            findNavController().navigate(dest)
             return
         }
 
@@ -71,7 +79,12 @@ class LoginFragment : Fragment() {
                             Toast.LENGTH_SHORT
                         ).show()
                         viewModel.resetState()
-                        findNavController().navigate(R.id.action_login_to_home)
+                        // First login → show onboarding; subsequent logins → go straight to Home
+                        val dest = if (sessionManager.hasCompletedOnboarding())
+                            R.id.action_login_to_home
+                        else
+                            R.id.action_login_to_onboarding
+                        findNavController().navigate(dest)
                     }
                     is FirebaseAuthResult.Error -> {
                         Toast.makeText(requireContext(), it.message, Toast.LENGTH_LONG).show()

@@ -19,6 +19,11 @@
             app:destination="@id/navigation_home"
             app:popUpTo="@id/nav_graph"
             app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_login_to_onboarding"
+            app:destination="@id/onboardingFragment"
+            app:popUpTo="@id/nav_graph"
+            app:popUpToInclusive="true" />
     </fragment>
 
     <fragment
@@ -98,6 +103,19 @@
         <action
             android:id="@+id/action_profile_to_login"
             app:destination="@id/loginFragment"
+            app:popUpTo="@id/nav_graph"
+            app:popUpToInclusive="true" />
+    </fragment>
+
+    <!-- Onboarding — shown only on first login -->
+    <fragment
+        android:id="@+id/onboardingFragment"
+        android:name="com.adam.ecolens.ui.onboarding.OnboardingFragment"
+        android:label="Kenalan Dulu"
+        tools:layout="@layout/fragment_onboarding">
+        <action
+            android:id="@+id/action_onboarding_to_home"
+            app:destination="@id/navigation_home"
             app:popUpTo="@id/nav_graph"
             app:popUpToInclusive="true" />
     </fragment>
