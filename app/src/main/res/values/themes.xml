@@ -9,6 +9,20 @@
         <item name="android:statusBarColor">@color/primary_dark</item>
         <item name="android:windowBackground">@color/bg_light</item>
 
+        <!-- Text & Surface Colors -->
+        <item name="android:textColorPrimary">@color/text_primary</item>
+        <item name="android:textColorSecondary">@color/text_secondary</item>
+        <item name="android:textColorHint">@color/text_secondary</item>
+        <item name="android:editTextColor">@color/text_primary</item>
+        <item name="colorOnSurface">@color/text_primary</item>
+        <item name="colorOnSurfaceVariant">@color/text_secondary</item>
+
+        <!-- Progress Bar & Input Controls Tint -->
+        <item name="android:indeterminateTint">@color/primary</item>
+        <item name="colorSecondary">@color/primary</item>
+        <item name="colorControlActivated">@color/primary</item>
+        <item name="colorControlNormal">@color/text_secondary</item>
+
         <!-- Tambahkan baris ini untuk membuat ikon status bar menjadi gelap -->
         <item name="android:windowLightStatusBar">true</item>
 

@@ -1,9 +1,15 @@
 package com.adam.ecolens.ui.quiz.adapter
 
+import android.content.Context
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.style.ForegroundColorSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.adam.ecolens.R
 import com.adam.ecolens.data.model.QuizLevel
 import com.adam.ecolens.databinding.ItemQuizLevelBinding
 
@@ -36,13 +42,14 @@ class LevelAdapter(
             holder.binding.imgLockIcon.visibility = View.GONE
             holder.binding.cardLevel.alpha = 1.0f
 
-            // Dynamic stars: one star per question, filled if answered correctly
+            // Dynamic stars: one star per question, filled (gold) if answered correctly,
+            // empty (gray) otherwise. Never attempted -> show nothing.
             val total = level.totalQuestionsAttempted
             val correct = level.correctCount
             holder.binding.tvStars.text = if (total > 0) {
-                "★".repeat(correct) + "☆".repeat(total - correct)
+                buildStarSpannable(holder.itemView.context, correct, total)
             } else {
-                "" // Never attempted — show nothing
+                ""
             }
 
             holder.binding.cardLevel.setOnClickListener {
@@ -60,4 +67,28 @@ class LevelAdapter(
     }
 
     override fun getItemCount(): Int = levels.size
+
+    /**
+     * Builds a SpannableString of [total] star characters where the first [correct]
+     * stars are filled (★, colored gold via R.color.star_active) and the rest are
+     * empty (☆, colored gray via R.color.star_inactive).
+     */
+    private fun buildStarSpannable(context: Context, correct: Int, total: Int): SpannableString {
+        val starsText = "★".repeat(correct) + "☆".repeat(total - correct)
+        val spannable = SpannableString(starsText)
+
+        val activeColor = ContextCompat.getColor(context, R.color.star_active)
+        val inactiveColor = ContextCompat.getColor(context, R.color.star_inactive)
+
+        for (i in starsText.indices) {
+            val color = if (i < correct) activeColor else inactiveColor
+            spannable.setSpan(
+                ForegroundColorSpan(color),
+                i,
+                i + 1,
+                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+            )
+        }
+        return spannable
+    }
 }

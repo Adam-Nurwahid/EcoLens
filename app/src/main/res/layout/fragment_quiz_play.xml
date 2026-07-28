@@ -85,6 +85,8 @@
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="8dp"
                             android:padding="12dp"
+                            android:textColor="@color/text_primary"
+                            android:buttonTint="@color/primary"
                             android:textSize="15sp"
                             tools:text="Opsi A" />
 
@@ -94,6 +96,8 @@
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="8dp"
                             android:padding="12dp"
+                            android:textColor="@color/text_primary"
+                            android:buttonTint="@color/primary"
                             android:textSize="15sp"
                             tools:text="Opsi B" />
 
@@ -103,6 +107,8 @@
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="8dp"
                             android:padding="12dp"
+                            android:textColor="@color/text_primary"
+                            android:buttonTint="@color/primary"
                             android:textSize="15sp"
                             tools:text="Opsi C" />
 
@@ -111,6 +117,8 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:padding="12dp"
+                            android:textColor="@color/text_primary"
+                            android:buttonTint="@color/primary"
                             android:textSize="15sp"
                             tools:text="Opsi D" />
                     </RadioGroup>
@@ -183,6 +191,7 @@
         android:layout_width="64dp"
         android:layout_height="64dp"
         android:layout_gravity="center"
+        android:indeterminateTint="@color/primary"
         android:visibility="visible"
         tools:visibility="visible" />
 
