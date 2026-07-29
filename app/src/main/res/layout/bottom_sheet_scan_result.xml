@@ -113,6 +113,7 @@
         android:layout_marginTop="20dp"
         android:text="@string/btn_scan_again"
         android:textSize="16sp"
+        android:textColor="@color/white"
         android:textStyle="bold"
         app:cornerRadius="14dp"
         app:backgroundTint="@color/primary" />
