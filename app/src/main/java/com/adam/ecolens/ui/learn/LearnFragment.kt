@@ -10,7 +10,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.adam.ecolens.databinding.FragmentLearnBinding
 import com.adam.ecolens.ui.ViewModelFactory
 import com.adam.ecolens.ui.learn.adapter.EncyclopediaAdapter
-import com.adam.ecolens.ui.learn.adapter.NewsAdapter
 
 class LearnFragment : Fragment() {
 
@@ -22,7 +21,6 @@ class LearnFragment : Fragment() {
     }
 
     private lateinit var encyclopediaAdapter: EncyclopediaAdapter
-    private lateinit var newsAdapter: NewsAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -47,11 +45,6 @@ class LearnFragment : Fragment() {
             adapter = encyclopediaAdapter
         }
 
-        newsAdapter = NewsAdapter()
-        binding.rvNews.apply {
-            layoutManager = LinearLayoutManager(requireContext())
-            adapter = newsAdapter
-        }
     }
 
     private fun observeViewModel() {
@@ -59,9 +52,6 @@ class LearnFragment : Fragment() {
             encyclopediaAdapter.submitList(items)
         }
 
-        viewModel.newsItems.observe(viewLifecycleOwner) { news ->
-            newsAdapter.submitList(news)
-        }
     }
 
     override fun onDestroyView() {

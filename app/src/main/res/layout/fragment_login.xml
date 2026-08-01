@@ -15,11 +15,10 @@
 
         <ImageView
             android:id="@+id/imgLogo"
-            android:layout_width="96dp"
-            android:layout_height="96dp"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
             android:layout_marginTop="32dp"
-            android:src="@drawable/ic_nav_scan"
-            app:tint="@color/primary"
+            android:src="@mipmap/ic_launcher_foreground"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"

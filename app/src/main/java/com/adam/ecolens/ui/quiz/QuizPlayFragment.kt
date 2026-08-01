@@ -9,11 +9,18 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.adam.ecolens.R
+import com.adam.ecolens.databinding.DialogQuizResultBinding
 import com.adam.ecolens.databinding.FragmentQuizPlayBinding
 import com.adam.ecolens.ui.ViewModelFactory
-
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import android.graphics.Color
+import android.text.SpannableStringBuilder
+import android.text.style.ForegroundColorSpan
 /**
  * Active quiz play screen.
  *
@@ -34,6 +41,9 @@ class QuizPlayFragment : Fragment() {
 
     /** Stored as a field so the retry click listener can call loadLevel() without re-reading args. */
     private var levelId: Int = 1
+
+    /** Coroutine job for the auto-advance delay — cancelled in onDestroyView(). */
+    private var autoAdvanceJob: Job? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -69,8 +79,11 @@ class QuizPlayFragment : Fragment() {
             }
         }
 
+        // The submit button is only used to check an answer; advancing is now automatic.
         binding.btnSubmit.setOnClickListener {
             if (viewModel.isAnswerSubmitted.value == true) {
+                // Manual tap still works as a skip if user doesn't want to wait.
+                autoAdvanceJob?.cancel()
                 viewModel.nextQuestion()
             } else {
                 if (viewModel.selectedAnswerIndex.value == null) {
@@ -173,8 +186,16 @@ class QuizPlayFragment : Fragment() {
                     }
                 }
 
+                // Update button label but auto-advance after delay so user sees feedback.
                 binding.btnSubmit.text = "Lanjut ke Soal Berikutnya →"
                 binding.btnSubmit.isEnabled = true
+
+                // Cancel any previous pending advance, then schedule the new one.
+                autoAdvanceJob?.cancel()
+                autoAdvanceJob = viewLifecycleOwner.lifecycleScope.launch {
+                    delay(1300L)
+                    viewModel.nextQuestion()
+                }
             }
         }
 
@@ -188,29 +209,59 @@ class QuizPlayFragment : Fragment() {
     private var resultDialog: AlertDialog? = null
 
     private fun showResultDialog(state: QuizCompletedState) {
-        // Cegah dialog dobel muncul
+        // Prevent duplicate dialogs
         resultDialog?.dismiss()
 
-        val starsText = "★".repeat(state.correctCount) + "☆".repeat(state.totalQuestions - state.correctCount)
-        val message = "Skor Akhir: ${state.score} / 100\n" +
-                "Bintang: $starsText (${state.correctCount}/${state.totalQuestions} benar)\n" +
-                "Selamat! Kamu berhasil menyelesaikan level ini! 🎉"
+        val filledStars = "★".repeat(state.correctCount)
+        val emptyStars = "☆".repeat(state.totalQuestions - state.correctCount)
+
+        val spannableStars = SpannableStringBuilder(filledStars + emptyStars).apply {
+            if (filledStars.isNotEmpty()) {
+                setSpan(
+                    ForegroundColorSpan(Color.parseColor("#FFD700")),
+                    0,
+                    filledStars.length,
+                    SpannableStringBuilder.SPAN_EXCLUSIVE_EXCLUSIVE
+                )
+            }
+            if (emptyStars.isNotEmpty()) {
+                setSpan(
+                    ForegroundColorSpan(Color.parseColor("#B0B0B0")),
+                    filledStars.length,
+                    filledStars.length + emptyStars.length,
+                    SpannableStringBuilder.SPAN_EXCLUSIVE_EXCLUSIVE
+                )
+            }
+        }
+
+        val dialogBinding = DialogQuizResultBinding.inflate(LayoutInflater.from(requireContext()))
+
+        dialogBinding.tvDialogStars.text = spannableStars
+        dialogBinding.tvDialogScore.text = "Skor Akhir: ${state.score} / 100"
+        dialogBinding.tvDialogMessage.text =
+            "${state.correctCount}/${state.totalQuestions} benar \u2022 Selamat! Kamu berhasil menyelesaikan level ini! 🎉"
 
         resultDialog = AlertDialog.Builder(requireContext())
-            .setTitle("Kuis Selesai!")
-            .setMessage(message)
+            .setView(dialogBinding.root)
             .setCancelable(false)
-            .setPositiveButton("Ke Daftar Level") { dialog, _ ->
-                dialog.dismiss()
-                if (isAdded) {
-                    findNavController().navigateUp()
-                }
+            .create()
+
+        resultDialog?.window?.setBackgroundDrawableResource(android.R.color.transparent)
+
+        dialogBinding.btnDialogClose.setOnClickListener {
+            resultDialog?.dismiss()
+            if (isAdded) {
+                findNavController().navigateUp()
             }
-            .show()
+        }
+
+        resultDialog?.show()
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
+        autoAdvanceJob?.cancel()
+        autoAdvanceJob = null
         resultDialog?.dismiss()
         resultDialog = null
         _binding = null

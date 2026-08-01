@@ -73,6 +73,8 @@ class CoachMarkOverlay @JvmOverloads constructor(
     private val tooltipRadius = 20f.dp
     private val buttonHeight = 48f.dp
     private val buttonRadius = 50f.dp
+    /** Gap between the bottom of the wrapped text block and the top of the primary button. */
+    private val textToButtonGap = 16f.dp
 
     // Color tokens matching the app's design system
     private val colorScrim = Color.parseColor("#CC000000")        // 80% black scrim
@@ -215,7 +217,11 @@ class CoachMarkOverlay @JvmOverloads constructor(
         val textBlockHeight = textLines.size * lineHeight
 
         val tooltipWidth = maxTooltipWidth
-        val tooltipHeight = tooltipPadding * 2 + textBlockHeight + buttonHeight + tooltipPadding
+        // Step-counter occupies: tooltipPadding (top) + stepCounterPaint.textSize + 4f gap before body text.
+        // Body text occupies: textBlockHeight.
+        // Below body text: textToButtonGap + buttonHeight + tooltipPadding (bottom).
+        val stepCounterOffset = tooltipPadding + stepCounterPaint.textSize + 4f
+        val tooltipHeight = stepCounterOffset + textBlockHeight + textToButtonGap + buttonHeight + tooltipPadding
 
         val tooltipLeft = (width - tooltipWidth) / 2f
         val spotBottom = cy + spotRadius
@@ -234,14 +240,14 @@ class CoachMarkOverlay @JvmOverloads constructor(
         val counterText = "Langkah $currentStep dari $totalSteps"
         canvas.drawText(counterText, tooltipRect.left + tooltipPadding, tooltipRect.top + tooltipPadding + stepCounterPaint.textSize, stepCounterPaint)
 
-        // Tooltip body text
-        var textY = tooltipRect.top + tooltipPadding * 2 + stepCounterPaint.textSize + 4f
+        // Tooltip body text — starts after the step-counter offset
+        var textY = tooltipRect.top + stepCounterOffset + lineHeight * 0.8f
         for (line in textLines) {
             canvas.drawText(line, tooltipRect.left + tooltipPadding, textY, tooltipTextPaint)
             textY += lineHeight
         }
 
-        // Primary button
+        // Primary button — sits textToButtonGap below the text block, tooltipPadding above the bubble bottom
         val btnTop = tooltipRect.bottom - tooltipPadding - buttonHeight
         val btnLeft = tooltipRect.left + tooltipPadding
         val btnRight = tooltipRect.right - tooltipPadding

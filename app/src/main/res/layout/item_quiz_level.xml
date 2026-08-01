@@ -25,7 +25,6 @@
                 android:id="@+id/tvLevelBadge"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@drawable/ic_nav_scan"
                 android:backgroundTint="@color/primary_container"
                 android:gravity="center"
                 android:text="1"
@@ -82,7 +81,7 @@
             android:id="@+id/imgArrow"
             android:layout_width="24dp"
             android:layout_height="24dp"
-            android:src="@drawable/ic_nav_home"
+            android:src="@drawable/baseline_play_arrow_24"
             app:tint="@color/primary" />
 
     </LinearLayout>

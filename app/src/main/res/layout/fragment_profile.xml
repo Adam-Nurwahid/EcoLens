@@ -62,7 +62,6 @@
                         android:id="@+id/tvProfilePoints"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/ic_nav_scan"
                         android:backgroundTint="#33FFFFFF"
                         android:paddingHorizontal="14dp"
                         android:paddingVertical="6dp"
@@ -76,7 +75,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
-                        android:background="@drawable/ic_nav_scan"
                         android:backgroundTint="#33FFFFFF"
                         android:paddingHorizontal="14dp"
                         android:paddingVertical="6dp"
@@ -94,7 +92,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
-            android:text="Komposisi Deteksi Sampah 📊"
+            android:text="Jenis sampah yang pernah di cek"
             android:textColor="@color/primary_dark"
             android:textSize="17sp"
             android:textStyle="bold" />
@@ -203,7 +201,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
-            android:text="Riwayat Pindaian Terbaru 🕒"
+            android:text="Riwayat Pindaian Terbaru "
             android:textColor="@color/primary_dark"
             android:textSize="17sp"
             android:textStyle="bold" />

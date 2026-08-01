@@ -91,6 +91,39 @@ class FirestoreRepository {
     }
 
     /**
+     * Saves a user-submitted incorrect-prediction feedback report to the global
+     * `scanFeedback` collection. Stored at the top level (not per-user) so that
+     * all reports are easily accessible for model improvement analysis.
+     *
+     * Structure: scanFeedback/{auto-id}
+     *   - uid              : reporter's UID (for traceability, not displayed publicly)
+     *   - predictedCategory: label the AI returned
+     *   - correctCategory  : label the user selected (nullable)
+     *   - note             : optional free-text from the user
+     *   - imageUri         : optional URI of the scanned image
+     *   - timestamp        : server timestamp
+     */
+    suspend fun saveScanFeedback(
+        uid: String,
+        predictedCategory: String,
+        correctCategory: String?,
+        note: String?,
+        imageUri: String?
+    ) {
+        val data = hashMapOf(
+            "uid" to uid,
+            "predictedCategory" to predictedCategory,
+            "correctCategory" to correctCategory,
+            "note" to note,
+            "imageUri" to imageUri,
+            "timestamp" to Timestamp.now()
+        )
+        db.collection("scanFeedback")
+            .add(data)
+            .await()
+    }
+
+    /**
      * Fetches the full scan history for [uid], ordered by most recent first.
      * Returns an empty list on error.
      */

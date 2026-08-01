@@ -1,121 +1,150 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@drawable/bg_bottom_sheet"
-    android:orientation="vertical"
-    android:padding="20dp">
+    android:layout_height="wrap_content">
 
-    <!-- Handle indicator -->
-    <View
-        android:layout_width="40dp"
-        android:layout_height="4dp"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginBottom="16dp"
-        android:background="@color/divider" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/scan_result_title"
-        android:textColor="@color/text_primary"
-        android:textSize="20sp"
-        android:textStyle="bold" />
-
-    <!-- Result Banner Card (Color Coded Dynamically) -->
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/cardResultCategory"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="14dp"
-        app:cardCornerRadius="18dp"
-        app:cardElevation="2dp"
-        app:cardBackgroundColor="@color/category_organik_light">
+        android:background="@drawable/bg_bottom_sheet"
+        android:orientation="vertical"
+        android:padding="20dp">
 
-        <LinearLayout
+        <!-- Handle indicator -->
+        <View
+            android:layout_width="40dp"
+            android:layout_height="4dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="16dp"
+            android:background="@color/divider" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/scan_result_title"
+            android:textColor="@color/text_primary"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <!-- Result Banner Card (Color Coded Dynamically) -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardResultCategory"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="16dp"
-            android:gravity="center_vertical">
-
-            <ImageView
-                android:id="@+id/imgResultThumbnail"
-                android:layout_width="64dp"
-                android:layout_height="64dp"
-                android:scaleType="centerCrop"
-                tools:src="@drawable/ic_nav_scan" />
+            android:layout_marginTop="14dp"
+            app:cardCornerRadius="18dp"
+            app:cardElevation="2dp"
+            app:cardBackgroundColor="@color/category_organik_light">
 
             <LinearLayout
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="14dp"
-                android:layout_weight="1"
-                android:orientation="vertical">
+                android:orientation="horizontal"
+                android:padding="16dp"
+                android:gravity="center_vertical">
 
-                <TextView
-                    android:id="@+id/tvResultLabel"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="SAMPAH ORGANIK"
-                    android:textColor="@color/category_organik"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
+                <ImageView
+                    android:id="@+id/imgResultThumbnail"
+                    android:layout_width="64dp"
+                    android:layout_height="64dp"
+                    android:scaleType="centerCrop"
+                    tools:src="@drawable/ic_nav_scan" />
 
-                <TextView
-                    android:id="@+id/tvConfidence"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:text="Tingkat Akurasi AI: 98.5%"
-                    android:textColor="@color/text_secondary"
-                    android:textSize="13sp" />
+                    android:layout_marginStart="14dp"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tvResultLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="SAMPAH ORGANIK"
+                        android:textColor="@color/category_organik"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tvConfidence"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:text="Tingkat Akurasi AI: 98.5%"
+                        android:textColor="@color/text_secondary"
+                        android:textSize="13sp" />
+                </LinearLayout>
             </LinearLayout>
-        </LinearLayout>
-    </com.google.android.material.card.MaterialCardView>
+        </com.google.android.material.card.MaterialCardView>
 
-    <!-- Educational Tip Card -->
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="Panduan Pemilahan Sampah 💡"
-        android:textColor="@color/text_primary"
-        android:textSize="15sp"
-        android:textStyle="bold" />
+        <!-- Educational Tip Card -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Panduan Pemilahan Sampah 💡"
+            android:textColor="@color/text_primary"
+            android:textSize="15sp"
+            android:textStyle="bold" />
 
-    <TextView
-        android:id="@+id/tvDisposalTip"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="6dp"
-        android:lineSpacingExtra="3dp"
-        android:text="Pisahkan ke tempat sampah HIJAU! Bisa diolah menjadi pupuk kompos."
-        android:textColor="@color/text_secondary"
-        android:textSize="13sp" />
+        <TextView
+            android:id="@+id/tvDisposalTip"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:lineSpacingExtra="3dp"
+            android:text="Pisahkan ke tempat sampah HIJAU! Bisa diolah menjadi pupuk kompos."
+            android:textColor="@color/text_secondary"
+            android:textSize="13sp" />
 
-    <!-- Class Probabilities Breakdown -->
-    <TextView
-        android:id="@+id/tvProbabilitiesDetail"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="14dp"
-        android:textColor="@color/text_secondary"
-        android:textSize="12sp"
-        tools:text="Detail AI: Organik (98.5%), Anorganik (1.2%), B3 (0.3%)" />
+        <!-- Class Probabilities Breakdown (sorted descending) -->
+        <TextView
+            android:id="@+id/tvProbabilitiesDetail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            android:textColor="@color/text_secondary"
+            android:textSize="12sp"
+            tools:text="Detail AI: Organik (98.5%), Anorganik (1.2%), B3 (0.3%)" />
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnScanAgain"
-        android:layout_width="match_parent"
-        android:layout_height="54dp"
-        android:layout_marginTop="20dp"
-        android:text="@string/btn_scan_again"
-        android:textSize="16sp"
-        android:textColor="@color/white"
-        android:textStyle="bold"
-        app:cornerRadius="14dp"
-        app:backgroundTint="@color/primary" />
+        <!-- Feedback section — report incorrect prediction -->
+        <TextView
+            android:id="@+id/tvFeedbackPrompt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:text="Prediksi salah? Laporkan di sini"
+            android:textColor="@color/primary"
+            android:textSize="12sp"
+            android:textStyle="italic" />
 
-</LinearLayout>
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnReportFeedback"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:text="Laporkan Prediksi Salah"
+            android:textSize="14sp"
+            app:strokeColor="@color/primary"
+            app:cornerRadius="12dp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnScanAgain"
+            android:layout_width="match_parent"
+            android:layout_height="54dp"
+            android:layout_marginTop="16dp"
+            android:text="@string/btn_scan_again"
+            android:textSize="16sp"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            app:cornerRadius="14dp"
+            app:backgroundTint="@color/primary" />
+
+    </LinearLayout>
+
+</androidx.core.widget.NestedScrollView>

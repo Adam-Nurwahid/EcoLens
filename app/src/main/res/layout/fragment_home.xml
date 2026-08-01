@@ -165,7 +165,7 @@
                     android:layout_marginTop="16dp"
                     android:minHeight="@dimen/min_touch_target"
                     android:paddingHorizontal="20dp"
-                    android:text="Mulai Belajar 🌿"
+                    android:text="Mulai Belajar "
                     android:textColor="@color/primary_dark"
                     android:textSize="14sp"
                     android:textStyle="bold"
@@ -428,7 +428,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
-                        android:text="Tahukah Kamu? 🌿💡"
+                        android:text="Tahukah Kamu? "
                         android:textColor="@color/primary_dark"
                         android:textSize="16sp"
                         android:textStyle="bold" />

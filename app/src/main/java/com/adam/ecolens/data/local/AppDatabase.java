@@ -5,15 +5,17 @@ import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import com.adam.ecolens.data.local.dao.QuizScoreDao;
+import com.adam.ecolens.data.local.dao.ScanFeedbackDao;
 import com.adam.ecolens.data.local.dao.ScanHistoryDao;
 import com.adam.ecolens.data.local.dao.UserDao;
 import com.adam.ecolens.data.local.entity.QuizScoreEntity;
+import com.adam.ecolens.data.local.entity.ScanFeedbackEntity;
 import com.adam.ecolens.data.local.entity.ScanHistoryEntity;
 import com.adam.ecolens.data.local.entity.UserEntity;
 
 @Database(
-    entities = {UserEntity.class, ScanHistoryEntity.class, QuizScoreEntity.class},
-    version = 1,
+    entities = {UserEntity.class, ScanHistoryEntity.class, QuizScoreEntity.class, ScanFeedbackEntity.class},
+    version = 2,
     exportSchema = false
 )
 public abstract class AppDatabase extends RoomDatabase {
@@ -21,6 +23,7 @@ public abstract class AppDatabase extends RoomDatabase {
     public abstract UserDao userDao();
     public abstract ScanHistoryDao scanHistoryDao();
     public abstract QuizScoreDao quizScoreDao();
+    public abstract ScanFeedbackDao scanFeedbackDao();
 
     private static volatile AppDatabase INSTANCE;
 

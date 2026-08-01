@@ -36,7 +36,7 @@ class ViewModelFactory(private val context: Context) : ViewModelProvider.Factory
     private val authRepository by lazy { AuthRepository(db.userDao(), sessionManager, firestoreRepository) }
 
     // Scan & Quiz now backed by Firestore instead of Room
-    private val scanRepository by lazy { ScanRepository(firestoreRepository) }
+    private val scanRepository by lazy { ScanRepository(firestoreRepository, db.scanFeedbackDao()) }
     private val quizRepository by lazy { QuizRepository(firestoreRepository) }
 
     private val educationRepository by lazy { EducationRepository() }

@@ -71,6 +71,33 @@ class ScanViewModel(
         _scanResultState.value = null
     }
 
+    /**
+     * Persists a user-submitted incorrect-prediction report via [ScanRepository].
+     * Writes to both Room (local) and Firestore (cloud) in a background coroutine.
+     * The caller shows a Toast/Snackbar for user feedback directly.
+     */
+    fun saveFeedback(
+        predictedCategory: String,
+        correctCategory: String?,
+        note: String?,
+        imageUri: String?
+    ) {
+        viewModelScope.launch {
+            try {
+                val uid = authRepository.getUid() ?: return@launch
+                scanRepository.saveFeedback(
+                    uid = uid,
+                    predictedCategory = predictedCategory,
+                    correctCategory = correctCategory,
+                    note = note,
+                    imageUri = imageUri
+                )
+            } catch (e: Exception) {
+                // Silently ignore; feedback is best-effort
+            }
+        }
+    }
+
     override fun onCleared() {
         super.onCleared()
     }
