@@ -15,6 +15,7 @@ import com.adam.ecolens.ui.auth.LoginViewModel
 import com.adam.ecolens.ui.auth.RegisterViewModel
 import com.adam.ecolens.ui.home.HomeViewModel
 import com.adam.ecolens.ui.learn.LearnViewModel
+import com.adam.ecolens.ui.onboarding.OnboardingViewModel
 import com.adam.ecolens.ui.profile.ProfileViewModel
 import com.adam.ecolens.ui.quiz.QuizPlayViewModel
 import com.adam.ecolens.ui.quiz.QuizViewModel
@@ -68,6 +69,9 @@ class ViewModelFactory(private val context: Context) : ViewModelProvider.Factory
             }
             modelClass.isAssignableFrom(ProfileViewModel::class.java) -> {
                 ProfileViewModel(authRepository, scanRepository) as T
+            }
+            modelClass.isAssignableFrom(OnboardingViewModel::class.java) -> {
+                OnboardingViewModel(authRepository) as T
             }
             else -> throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")
         }

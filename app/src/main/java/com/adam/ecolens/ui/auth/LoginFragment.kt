@@ -79,6 +79,9 @@ class LoginFragment : Fragment() {
                             Toast.LENGTH_SHORT
                         ).show()
                         viewModel.resetState()
+                        if (it.isReturningAccount) {
+                            sessionManager.setOnboardingCompleted()
+                        }
                         // First login → show onboarding; subsequent logins → go straight to Home
                         val dest = if (sessionManager.hasCompletedOnboarding())
                             R.id.action_login_to_home

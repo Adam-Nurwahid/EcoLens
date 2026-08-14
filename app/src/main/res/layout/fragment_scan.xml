@@ -114,6 +114,7 @@
 
         <!-- Action Buttons Container -->
         <LinearLayout
+            android:id="@+id/layoutActionButtons"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
@@ -152,6 +153,21 @@
                 app:iconSize="22dp" />
 
         </LinearLayout>
+
+        <!-- AI Disclaimer Text -->
+        <TextView
+            android:id="@+id/tvAiWarning"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/ai_warning"
+            android:textColor="@color/text_secondary"
+            android:textSize="12sp"
+            android:textAlignment="center"
+            android:gravity="center"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/layoutActionButtons" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

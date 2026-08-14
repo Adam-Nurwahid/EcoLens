@@ -35,4 +35,5 @@
     <string name="leaderboard_title">Papan Peringkat</string>
     <string name="btn_start_quiz">Mulai Kuis</string>
     <string name="logout">Keluar Akun</string>
+    <string name="ai_warning">AI terkadang bisa keliru, bacalah materi untuk memahami sendiri perbedaannya</string>
 </resources>

@@ -16,7 +16,7 @@ sealed class AuthResult {
 
 /** Result type specifically for the Firebase anonymous sign-in flow. */
 sealed class FirebaseAuthResult {
-    data class Success(val uid: String, val displayName: String) : FirebaseAuthResult()
+    data class Success(val uid: String, val displayName: String, val isReturningAccount: Boolean = false ) : FirebaseAuthResult()
     data class Error(val message: String) : FirebaseAuthResult()
 }
 
@@ -61,25 +61,21 @@ class AuthRepository(
         if (cleanName.isEmpty()) {
             return@withContext FirebaseAuthResult.Error("Nama tidak boleh kosong.")
         }
-
         return@withContext try {
-            // 1. Firebase Anonymous sign-in — returns immediately if already signed in
-            val authResult = FirebaseAuth.getInstance().signInAnonymously().await()
-            val uid = authResult.user?.uid
-                ?: return@withContext FirebaseAuthResult.Error("Gagal mendapatkan UID dari Firebase.")
-
-            // 2. Persist session locally so the app skips login on next launch
-            sessionManager.createAnonymousSession(uid, cleanName)
-
-            // 3. Upsert Firestore user document (no-op if already exists, safe to re-call)
-            firestoreRepository?.createOrUpdateUser(uid, cleanName)
-
-            FirebaseAuthResult.Success(uid, cleanName)
+            FirebaseAuth.getInstance().signInAnonymously().await()
+            val isReturningAccount = firestoreRepository?.userExists(cleanName) ?: false
+            sessionManager.createAnonymousSession(cleanName, cleanName)
+            firestoreRepository?.createOrUpdateUser(cleanName, cleanName)
+            FirebaseAuthResult.Success(cleanName, cleanName, isReturningAccount)
         } catch (e: Exception) {
             FirebaseAuthResult.Error("Login gagal: ${e.localizedMessage}")
         }
     }
 
+    suspend fun saveOnboardingResult(answers: List<String>, bonusPoints: Int) {
+        val uid = getUid() ?: return
+        firestoreRepository?.saveOnboardingResult(uid, answers, bonusPoints)
+    }
     // ------------------------------------------------------------------
     // Legacy Room-based auth (kept for backward compatibility)
     // ------------------------------------------------------------------

@@ -56,6 +56,29 @@ class FirestoreRepository {
         }
     }
 
+    suspend fun findUidByName(name: String): String? {
+        return try {
+            val snapshot = db.collection("users")
+                .whereEqualTo("name", name)
+                .limit(1)
+                .get()
+                .await()
+            snapshot.documents.firstOrNull()?.id
+        } catch (e: Exception) {
+            null
+        }
+    }
+
+    suspend fun saveOnboardingResult(uid: String, answers: List<String>, bonusPoints: Int) {
+        val userRef = db.collection("users").document(uid)
+        userRef.update(
+            mapOf(
+                "onboardingAnswers" to answers,
+                "onboardingCompleted" to true,
+                "totalPoints" to FieldValue.increment(bonusPoints.toLong())
+            )
+        ).await()
+    }
     /**
      * One-shot fetch of the user profile. Returns null if the document
      * doesn't exist or an error occurs.
@@ -69,6 +92,13 @@ class FirestoreRepository {
         }
     }
 
+    suspend fun userExists(uid: String): Boolean {
+        return try {
+            db.collection("users").document(uid).get().await().exists()
+        } catch (e: Exception) {
+            false
+        }
+    }
     // -----------------------------------------------------------------------
     // Scan History
     // -----------------------------------------------------------------------

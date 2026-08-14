@@ -5,12 +5,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.adam.ecolens.R
 import com.adam.ecolens.data.local.SessionManager
 import com.adam.ecolens.databinding.FragmentOnboardingBinding
+import com.adam.ecolens.ui.ViewModelFactory
 import com.google.android.material.button.MaterialButton
 
 /**
@@ -61,10 +64,22 @@ class OnboardingFragment : Fragment() {
 
     private var currentStep = 0
     private val selectedAnswers = MutableList(questions.size) { "" }
+    private val viewModel: OnboardingViewModel by viewModels { ViewModelFactory(requireContext()) }
 
+    // Poin per opsi (index sesuai urutan `options`). Q1–Q4 menilai pemahaman
+// (opsi paling paham = poin terbesar); Q5 cuma preferensi → poin rata.
+    private val pointsPerQuestion = listOf(
+        listOf(10, 5, 2),
+        listOf(10, 5, 2),
+        listOf(10, 5, 2),
+        listOf(10, 5, 2),
+        listOf(5, 5, 5)
+    )
     // ---------------------------------------------------------------------------
     // Lifecycle
     // ---------------------------------------------------------------------------
+
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -195,10 +210,20 @@ class OnboardingFragment : Fragment() {
             finishOnboarding()
         }
     }
+    private fun calculateBonusPoints(): Int =
+        selectedAnswers.mapIndexed { qIndex, answer ->
+            val optionIndex = questions[qIndex].options.indexOf(answer)
+            if (optionIndex >= 0) pointsPerQuestion[qIndex][optionIndex] else 0
+        }.sum()
 
     private fun finishOnboarding() {
         val answers = selectedAnswers.joinToString("|")
+        val bonusPoints = calculateBonusPoints()
+
         sessionManager.setOnboardingCompleted(answers)
+        viewModel.submitOnboarding(selectedAnswers.toList(), bonusPoints)
+
+        Toast.makeText(requireContext(), "+$bonusPoints poin bonus dari survey! 🎉", Toast.LENGTH_SHORT).show()
         findNavController().navigate(R.id.action_onboarding_to_home)
     }
 
