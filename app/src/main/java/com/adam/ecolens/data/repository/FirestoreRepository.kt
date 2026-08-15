@@ -104,20 +104,26 @@ class FirestoreRepository {
     // -----------------------------------------------------------------------
 
     /**
-     * Saves a new scan result to users/{uid}/scanHistory.
-     * Each call creates a new auto-ID document.
+     * Saves a new scan result to users/{uid}/scanHistory **and** atomically
+     * increments the user's totalPoints by [pointsPerScan].
+     * Uses a Firestore batch to guarantee both writes succeed together.
      */
-    suspend fun saveScan(uid: String, category: String, confidence: Float, imageUri: String? = null) {
+    suspend fun saveScan(uid: String, category: String, confidence: Float,
+                         imageUri: String? = null, pointsPerScan: Int = 10) {
+        val userRef = db.collection("users").document(uid)
+        val scanRef  = userRef.collection("scanHistory").document()
+
         val data = hashMapOf(
-            "category" to category,
+            "category"   to category,
             "confidence" to confidence,
-            "imageUri" to imageUri,
-            "timestamp" to Timestamp.now()
+            "imageUri"   to imageUri,
+            "timestamp"  to Timestamp.now()
         )
-        db.collection("users").document(uid)
-            .collection("scanHistory")
-            .add(data)
-            .await()
+
+        db.runBatch { batch ->
+            batch.set(scanRef, data)
+            batch.update(userRef, "totalPoints", FieldValue.increment(pointsPerScan.toLong()))
+        }.await()
     }
 
     /**

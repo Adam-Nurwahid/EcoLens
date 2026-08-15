@@ -1,15 +1,50 @@
+# =============================================
+# Android / Gradle Build Files
+# =============================================
 *.iml
 .gradle
 /local.properties
+local.properties
+/build
+/captures
+.externalNativeBuild
+.cxx
+
+# =============================================
+# IDE - IntelliJ / Android Studio
+# =============================================
+.DS_Store
 /.idea/caches
 /.idea/libraries
 /.idea/modules.xml
 /.idea/workspace.xml
 /.idea/navEditor.xml
 /.idea/assetWizardSettings.xml
-.DS_Store
-/build
-/captures
-.externalNativeBuild
-.cxx
-local.properties
+
+# =============================================
+# 🔐 SENSITIVE - Keystore & Credentials
+# JANGAN PERNAH dicommit ke repository publik!
+# Simpan backup secara TERPISAH & AMAN (misal: Google Drive pribadi)
+# =============================================
+*.jks
+*.keystore
+keystore.properties
+
+# File keystore binary (tanpa ekstensi) di folder app/
+app/keystore
+
+# =============================================
+# Firebase / Google Services
+# Berisi API key - jangan dicommit ke repo publik
+# Untuk repo PRIVAT: boleh dicommit agar CI/CD bisa build
+# Untuk repo PUBLIK: tambahkan di sini dan atur via CI/CD secrets
+# =============================================
+# google-services.json  <- uncomment jika repo ini PUBLIC
+
+# =============================================
+# Build Output
+# =============================================
+app/build/
+build/
+*.aab
+*.apk

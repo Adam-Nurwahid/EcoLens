@@ -46,6 +46,16 @@ class ProfileFragment : Fragment() {
         observeViewModel()
     }
 
+    /**
+     * Refresh profile data every time the fragment becomes visible.
+     * This ensures the pie chart, scan history, and points are always
+     * up-to-date after the user returns from the Scan screen.
+     */
+    override fun onResume() {
+        super.onResume()
+        viewModel.loadProfileData()
+    }
+
     private fun setupRecyclerView() {
         scanHistoryAdapter = ScanHistoryAdapter()
         binding.rvScanHistory.apply {
